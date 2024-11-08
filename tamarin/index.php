@@ -1,56 +1,58 @@
-<!DOCTYPE html>
-<html data-bs-theme="dark">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Ecole</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<?php
 
-</head>
-<body class="bg-body-tertiary">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-        <img src="/favicon.ico" alt="ICO" width="30" height="24">
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="../">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="../tamarin/">Tamarin</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../ideas/">Idea Box</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-<div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <form action="tamarin.php"  
- method="post">
-                    <div class="mb-3">
-                        <label for="classSelect" class="form-label">Select Your Class:</label>
-                        <select class="form-select" id="classSelect" name="selected_class">
-                            <option value="">Select a class</option>
-                            <option value="1/1">1/1</option>
-                            <option value="2/2">2/2</option>
-                            <option value="Class C">Class C</option>  
 
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+if ($_SERVER["REQUEST_METHOD"] != "POST") {
+  // Connect to your database (replace with your credentials)
+  $conn = mysqli_connect("localhost", "root", "", "tamarin");
+
+  // Check for connection errors
+  if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+  }
+
+  // Prepare a statement to prevent SQL injection
+  $stmt = mysqli_prepare($conn, "SELECT * FROM classes WHERE class = ?");
+  mysqli_stmt_bind_param($stmt, "s", $selectedClass);
+
+  // Execute the statement and check for errors
+  if (!mysqli_stmt_execute($stmt)) {
+    die("Error retrieving data: " . mysqli_error($conn));
+  }
+
+  $result = mysqli_stmt_get_result($stmt);
+
+  // Include the HTML template (replace with the actual path)
+  include("notamarin.html");
+  
+  mysqli_stmt_close($stmt);
+  mysqli_close($conn);
+}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $selectedClass = $_POST["selected_class"];
+
+  // Connect to your database (replace with your credentials)
+  $conn = mysqli_connect("localhost", "root", "", "tamarin");
+
+  // Check for connection errors
+  if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+  }
+
+  // Prepare a statement to prevent SQL injection
+  $stmt = mysqli_prepare($conn, "SELECT * FROM classes WHERE class = ?");
+  mysqli_stmt_bind_param($stmt, "s", $selectedClass);
+
+  // Execute the statement and check for errors
+  if (!mysqli_stmt_execute($stmt)) {
+    die("Error retrieving data: " . mysqli_error($conn));
+  }
+
+  $result = mysqli_stmt_get_result($stmt);
+
+  // Include the HTML template (replace with the actual path)
+  include("tamarin.html");
+  
+  mysqli_stmt_close($stmt);
+  mysqli_close($conn);
+}
+?>

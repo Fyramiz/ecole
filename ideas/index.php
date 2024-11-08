@@ -32,6 +32,8 @@
     </div>
   </div>
 </nav>
-<h1 class="text-center">Nothing To Put here Currently</h1>
+<div class="p-3 bg-info bg-opacity-10 border border-info border-start-0 rounded-end text-capitalize">
+  under construction
+</div>
 </body>
 </html>
